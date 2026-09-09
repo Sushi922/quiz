@@ -1,7 +1,7 @@
 import pgzrun
 TITLE="quiz master"
 WIDTH=870
-HEIGHT=650
+HEIGHT=700
 Marquee_box=Rect(0,10,880,80)
 question_box=Rect(20,100,650,150)
 timer_box=Rect(700,100,150,150)
@@ -34,5 +34,39 @@ def draw():
         screen.draw.filled_rect(i,"blue")
 
     marquee_message="Welcome to Quiz Master"+f"Q:{question_index} of {question_count}"
+
+    screen.draw.textbox(marquee_message,Marquee_box,color="yellow")
+
+    screen.draw.textbox(
+        str(timeleft),
+        timer_box,
+        color="pink"
+    )
+    screen.draw.textbox(
+        "Skip",
+        skip_box,
+        color="yellow",
+        angle=-90
+    )
+    screen.draw.textbox(
+        question[0].strip(),
+        question_box,
+        color="pink",
+        shadow=(0.5,0.5),
+        scolor="yellow"
+    )
+    index=1
+    for i in answer_boxes:
+        screen.draw.textbox(question[index].strip(),i,color="pink")
+        index=index+1
+
+def read_next_question():
+    global question_index
+    question_index=question_index+1
+    return questions.pop(0).split("|")
+question=read_next_question()
+
+
+
     
 pgzrun.go()
