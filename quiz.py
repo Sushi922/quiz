@@ -60,13 +60,78 @@ def draw():
         screen.draw.textbox(question[index].strip(),i,color="pink")
         index=index+1
 
+def update():
+    move_marquee()
+
+def read_question_file():
+    global question_count,questions
+    q_file=open(question_file_name,"r")
+    for question in q_file:
+        questions.append(question)
+        question_count=question_count+1
+    q_file.close()
+
+def on_mouse_down(pos):
+    index=1
+    for box in answer_boxes:
+        if box.collidepoint(pos):
+            if index is int(question[5]):
+                correct_answer()
+            else:
+                gameover()
+    if skip_box.collidepoint(pos):
+        skipquestion()
+
+
+def move_marquee():
+    Marquee_box.x=Marquee_box.x+2
+    if Marquee_box.left >870:
+        Marquee_box.right=0
+    
+
 def read_next_question():
     global question_index
     question_index=question_index+1
     return questions.pop(0).split("|")
 question=read_next_question()
 
+def correct_answer():
+    global score, question, timeleft, questions
+    score=score+1
 
+    if questions:
+        question=read_next_question()
+        timeleft=10
 
+    else:
+        gameover()
+
+def gameover():
+    global question, timeleft, is_game_over
+    message=f"Game over!\nYou got {score} questions correct!"
+    question=[message,"-","-","-","-","-"]
+    timeleft=0
+    is_game_over=True
+
+def skipquestion():
+    global question, timeleft
+
+    if questions and not  is_game_over:
+        question=read_next_question()
+        timeleft=10
+
+    else:
+        gameover
+
+def update_time_left():
+    global timeleft
+    if timeleft:
+        timeleft=timeleft-1
+
+    else:
+        gameover
+
+clock.schedule_interval(update_time_left,1)
+read_question_file()
     
 pgzrun.go()
