@@ -75,7 +75,7 @@ def on_mouse_down(pos):
     index=1
     for box in answer_boxes:
         if box.collidepoint(pos):
-            if index is int(question[5]):
+            if index == int(question[5]):
                 correct_answer()
             else:
                 gameover()
@@ -121,7 +121,7 @@ def skipquestion():
         timeleft=10
 
     else:
-        gameover
+        gameover()
 
 def update_time_left():
     global timeleft
@@ -133,5 +133,7 @@ def update_time_left():
 
 clock.schedule_interval(update_time_left,1)
 read_question_file()
+question=read_next_question()
+
     
 pgzrun.go()
